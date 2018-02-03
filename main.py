@@ -47,7 +47,7 @@ offers = { "beans":{ "unique_code":"3for2-beans",
                      "offer_price":2 * catalogue["beans"]["list_price"] },
            "coca-cola":{ "unique_code":"2for1-coca-cola",
                          "quantity":2,
-                         "offer_price":catalogue["coca-cola"]["list_price"] },
+                         "offer_price":1.0 },
            "onions":{ "unique_code":"reduced-onions",
                       "quantity":1,
                       "offer_price":0.29 }, # UKpounds 0.29/kg
@@ -103,8 +103,7 @@ if __name__ == '__main__':
         if unique_offer_code == "none":
             print "standard purchases:"
             for scanned_item in purchases[unique_offer_code]["items"]:
-                # print item
-                print scanned_item[0], scanned_item[1] * scanned_item[2]
+                print scanned_item[0], round((scanned_item[1] * scanned_item[2]),2)
         # offers:
         else:
             print "offers:"
@@ -115,4 +114,6 @@ if __name__ == '__main__':
                 item_list_price = scanned_item[2]
                 quotient = item_quantity // offer_quantity
                 remainder = item_quantity % offer_quantity
-                print scanned_item[0], scanned_item[1] * scanned_item[2], unique_offer_code, (quotient * offer_price + remainder * scanned_item[2])   
+                total_list_price = scanned_item[1] * scanned_item[2]
+                total_offer_price = quotient * offer_price + remainder * scanned_item[2]
+                print scanned_item[0], unique_offer_code, total_offer_price, "saving", total_offer_price - total_list_price   
