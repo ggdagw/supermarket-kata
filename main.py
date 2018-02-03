@@ -41,22 +41,22 @@ catalogue = { "beans":{ "list_price":0.50 },
 #     'home' : '/home/%(user)s',
 #     'bin' : '%(home)s/bin' 
 # })
-offers = { "beans":{ "code":"2for1",
+offers = { "beans":{ "unique_code":"2for1-beans",
                      "quantity":2,
                      "offer_price":catalogue["beans"]["list_price"] },
-           "coca-cola":{ "code":"3for2",
+           "coca-cola":{ "unique_code":"3for2-coca-cola",
                          "quantity":3,
                          "offer_price":2 * catalogue["coca-cola"]["list_price"] },
-           "onions":{ "code":"reduced",
+           "onions":{ "unique_code":"reduced-onions",
                       "quantity":1,
                       "offer_price":0.29 }, # UKpounds 0.29/kg
-           "gem":{ "code":"nforx",
+           "gem":{ "unique_code":"3for6-ales",
                    "quantity":3,
                    "offer_price":6.0 }, # UKpounds 6.00
-           "spitfire":{ "code":"nforx",
+           "spitfire":{ "unique_code":"3for6-ales",
                         "quantity":3,
                         "offer_price":6.0 },
-           "tribute":{ "code":"nforx",
+           "tribute":{ "unique_code":"3for6-ales",
                        "quantity":3,
                        "offer_price":6.0 }
 }
@@ -75,7 +75,7 @@ basket = [ ("beans",3),
 class purchase:
     """doc string"""
     items = []
-    offer_code = ""
+    unique_offer_code = ""
     quantity = 0
     offer_price = 0
 
@@ -91,12 +91,14 @@ if __name__ == '__main__':
         scanned_item = (item[0], item[1], catalogue[item[0]]["list_price"])
         # Check if there is an offer for that item:
         if scanned_item[0] in offers:
+            # if yes, see if we have an open offer_purchase
+            #   if no create new offer_purchase(s) and setup as appropriate
+            #   if yes fill out, close and create accordingly
+
             print offers[scanned_item[0]]
         else:
+            # if no, add to the default purchase holder
             purchases[0].items.append(scanned_item)
-        # if no, add to the default purchase holder
-        # if yes, see if we have an open offer_purchase
-        #   if no create new offer_purchase(s) and setup as appropriate
-        #   if yes fill out, close and create accordingly
+
 
     # for purchase in purchases report costs
