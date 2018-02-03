@@ -7,8 +7,9 @@
 # 'catalogue': currently stores the pricing for items.
 # 'offers':    holds information about any available offers.
 # 'basket':    holds the items to be purchased.
-# 'purchases': a list of purchase class instances for the items in the basket. 
-# Hardwired values for this exercise, would read from file.
+# 'purchases': a dictionary of 'purchase bags' to hold the items in the basket. 
+# The values for these data structures are Hardwired values for this exercise.
+# Would otherwise read from file.
 #
 
 # catalogue
@@ -41,12 +42,12 @@ catalogue = { "beans":{ "list_price":0.50 },
 #     'home' : '/home/%(user)s',
 #     'bin' : '%(home)s/bin' 
 # })
-offers = { "beans":{ "unique_code":"2for1-beans",
-                     "quantity":2,
-                     "offer_price":catalogue["beans"]["list_price"] },
-           "coca-cola":{ "unique_code":"3for2-coca-cola",
-                         "quantity":3,
-                         "offer_price":2 * catalogue["coca-cola"]["list_price"] },
+offers = { "beans":{ "unique_code":"3for2-beans",
+                     "quantity":3,
+                     "offer_price":2 * catalogue["beans"]["list_price"] },
+           "coca-cola":{ "unique_code":"2for1-coca-cola",
+                         "quantity":2,
+                         "offer_price":catalogue["coca-cola"]["list_price"] },
            "onions":{ "unique_code":"reduced-onions",
                       "quantity":1,
                       "offer_price":0.29 }, # UKpounds 0.29/kg
@@ -70,35 +71,48 @@ basket = [ ("beans",3),
 
 # purchases
 # ---------
-# Need an instance of a class to hold a purchase, as we will want a method to
-# calcuate the savings made on any offers applied to the purchases.
-class purchase:
-    """doc string"""
-    items = []
-    unique_offer_code = ""
-    quantity = 0
-    offer_price = 0
-
-# initialise with a single purchase instance, to hold the standard purchases
-purchases = [ purchase() ]
+# Using a dictionary of dictionaries again.
+# Purchases is a dictionary of 'purchase bags', keyed by unique offer codes.
+# Initialise with key "none" and empty 'purchase bag', to hold the standard purchases.
+purchases = { "none":{ "items":[], "offer_price":0 } }
 
 if __name__ == '__main__':
     """doc string"""
 
     for item in basket:
-        print item[0]
         # Extend the tuple with the list price:
         scanned_item = (item[0], item[1], catalogue[item[0]]["list_price"])
         # Check if there is an offer for that item:
         if scanned_item[0] in offers:
-            # if yes, see if we have an open offer_purchase
-            #   if no create new offer_purchase(s) and setup as appropriate
-            #   if yes fill out, close and create accordingly
-
-            print offers[scanned_item[0]]
+            # If yes, check if we already have a purchase bag for that offer:
+            unique_offer_code = offers[scanned_item[0]]["unique_code"]
+            if unique_offer_code in purchases: 
+                # If yes, add this item:
+                purchases[unique_offer_code]["items"].append(scanned_item)
+            else:
+                # If no create a new purchase bag for the offer and add the item:
+                purchases[unique_offer_code] = { "items":[], "offer_price":0 }
+                purchases[unique_offer_code]["items"].append(scanned_item)
         else:
             # if no, add to the default purchase holder
-            purchases[0].items.append(scanned_item)
+            purchases["none"]["items"].append(scanned_item)
 
-
-    # for purchase in purchases report costs
+    # report purchases costs
+    for unique_offer_code in purchases:
+        # standard purchases:
+        if unique_offer_code == "none":
+            print "standard purchases:"
+            for scanned_item in purchases[unique_offer_code]["items"]:
+                # print item
+                print scanned_item[0], scanned_item[1] * scanned_item[2]
+        # offers:
+        else:
+            print "offers:"
+            for scanned_item in purchases[unique_offer_code]["items"]:
+                offer_quantity = offers[scanned_item[0]]["quantity"]
+                offer_price = offers[scanned_item[0]]["offer_price"]
+                item_quantity = scanned_item[1]
+                item_list_price = scanned_item[2]
+                quotient = item_quantity // offer_quantity
+                remainder = item_quantity % offer_quantity
+                print scanned_item[0], scanned_item[1] * scanned_item[2], unique_offer_code, (quotient * offer_price + remainder * scanned_item[2])   
