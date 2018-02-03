@@ -86,11 +86,17 @@ if __name__ == '__main__':
     """doc string"""
 
     for item in basket:
+        print item[0]
         # Extend the tuple with the list price:
         scanned_item = (item[0], item[1], catalogue[item[0]]["list_price"])
-        print scanned_item
         # Check if there is an offer for that item:
+        if scanned_item[0] in offers:
+            print offers[scanned_item[0]]
+        else:
+            purchases[0].items.append(scanned_item)
         # if no, add to the default purchase holder
         # if yes, see if we have an open offer_purchase
         #   if no create new offer_purchase(s) and setup as appropriate
         #   if yes fill out, close and create accordingly
+
+    # for purchase in purchases report costs
