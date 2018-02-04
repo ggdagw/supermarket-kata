@@ -1,6 +1,14 @@
 # supermarket-kata
 programming exercise to model a supermarket pricing calculator
 
+## Summary
+
+I have written a small pricing calculator using Python.  The data structures are predominantly dictionaries of dictionaries.  These are efficient and adaptable data structures.  Hash tabels have O(1) look up costs, which will allow the code to run relatively quickly at scale (not withstanding that Python is an interpreted language).  Python's implementation of a hash table is relatively efficient in terms of memory, using less than twice the space that would be occupied by a list.  The ease of adding new keys would allow the code to be adapted should requirements change or features be added.
+
+Currently all the key data structures are initialised as literals (i.e. the data is hardwired) and not read from file.  I have spent no time formatting the output.  I have listed a number of ways in which I would like to improve the code below.
+
+The code currently supports offers of the form '3 for 2', '2 for £1', 'any 3 ales for £6', 'apples 20% off' and 'onions for 29p/kg'. 
+
 ## How to run
 
 * Simply run `python main.py`.  The code is wriiten in python v2.7.
@@ -22,3 +30,4 @@ programming exercise to model a supermarket pricing calculator
 4. If we stored the list and offer prices in the purchase data structure, then we could also implement a 'cheapest purchase free' or 'free delivery over £100' offers as a final pass.
 4. Currently the model only supports one offer per item listed in the catalogue.  This seems rather brittle.  It would be nice if the model worked out the best offer should more than one apply to the same item (such as 20% red wine and 2for1 wines in general).  However, we rarely see this sophistication in real supermarkets.
 5. There is currently no testing!  If I wrote a process_basket() function at the top level, and stored the offer and list prices in the purchase data structures, then it would be simple enough to define some test cases along with known 'purchase bags' to use with e.g. python's unittest module.
+6. I would like to relax the constraint that all items in a 'category offer' must currently have the same list price.
