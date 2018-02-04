@@ -103,7 +103,7 @@ if __name__ == '__main__':
         if unique_offer_code == "none":
             print "standard purchases:"
             for scanned_item in purchases[unique_offer_code]["items"]:
-                print scanned_item[0], round((scanned_item[1] * scanned_item[2]),2)
+                print '%s\t%.2f' % (scanned_item[0], round((scanned_item[1] * scanned_item[2]),2))
         # offers:
         else:
             print "offers:"
@@ -116,4 +116,4 @@ if __name__ == '__main__':
                 remainder = item_quantity % offer_quantity
                 total_list_price = scanned_item[1] * scanned_item[2]
                 total_offer_price = quotient * offer_price + remainder * scanned_item[2]
-                print scanned_item[0], unique_offer_code, total_offer_price, "saving", total_offer_price - total_list_price   
+                print '%s\t%s\t%.2f\tsaving\t%.2f' % (scanned_item[0], unique_offer_code, round(total_offer_price,2), round(total_offer_price - total_list_price,2))   
