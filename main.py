@@ -20,7 +20,10 @@
 #    change.
 catalogue = { "beans":{ "list_price":0.50 },
               "coca-cola":{ "list_price":0.70 }, 
-              "oranges":{ "list_price":1.99 }
+              "oranges":{ "list_price":1.99 },
+              "gem":{ "list_price":2.50 },
+              "spitfire":{ "list_price":2.50 },
+              "tribute":{ "list_price":2.50 }
 }
 
 # offers
@@ -67,14 +70,18 @@ offers = { "beans":{ "unique_code":"3for2-beans",
 # A list of tuples: the items and their quantities:
 basket = [ ("beans",3),
            ("coca-cola",2),
-           ("oranges",0.2) ]
+           ("oranges",0.2),
+           ("gem",1),
+           ("spitfire",1),
+           ("tribute",1)
+]
 
 # purchases
 # ---------
 # Using a dictionary of dictionaries again.
 # Purchases is a dictionary of 'purchase bags', keyed by unique offer codes.
 # Initialise with key "none" and empty 'purchase bag', to hold the standard purchases.
-purchases = { "none":{ "items":[], "offer_price":0 } }
+purchases = { "none":{ "items":[] } }
 
 if __name__ == '__main__':
     """doc string"""
@@ -91,7 +98,7 @@ if __name__ == '__main__':
                 purchases[unique_offer_code]["items"].append(scanned_item)
             else:
                 # If no create a new purchase bag for the offer and add the item:
-                purchases[unique_offer_code] = { "items":[], "offer_price":0 }
+                purchases[unique_offer_code] = { "items":[] }
                 purchases[unique_offer_code]["items"].append(scanned_item)
         else:
             # if no, add to the default purchase holder
@@ -107,13 +114,22 @@ if __name__ == '__main__':
         # offers:
         else:
             print "offers:"
+            # retrieve some details of the offer using the first item in items
+            total_item_quantity = 0
+            scanned_item = purchases[unique_offer_code]["items"][0]
+            offer_quantity = offers[scanned_item[0]]["quantity"]
+            offer_price = offers[scanned_item[0]]["offer_price"]
+            # *NB* brittle: also going to assume that all items have the same list price
+            item_list_price = scanned_item[2]
+            # tot up total number of items
             for scanned_item in purchases[unique_offer_code]["items"]:
-                offer_quantity = offers[scanned_item[0]]["quantity"]
-                offer_price = offers[scanned_item[0]]["offer_price"]
                 item_quantity = scanned_item[1]
-                item_list_price = scanned_item[2]
-                quotient = item_quantity // offer_quantity
-                remainder = item_quantity % offer_quantity
-                total_list_price = scanned_item[1] * scanned_item[2]
-                total_offer_price = quotient * offer_price + remainder * scanned_item[2]
-                print '%s\t%s\t%.2f\tsaving\t%.2f' % (scanned_item[0], unique_offer_code, round(total_offer_price,2), round(total_offer_price - total_list_price,2))   
+                total_item_quantity += item_quantity
+            # now work out whether the offer it met and calc costs accordingly
+            quotient = total_item_quantity // offer_quantity
+            remainder = total_item_quantity % offer_quantity
+            total_list_price = total_item_quantity * item_list_price
+            total_offer_price = quotient * offer_price + remainder * item_list_price
+            # 
+            print '%s\t%.2f\tsaving\t%.2f' % (unique_offer_code, round(total_offer_price,2),
+                                              round(total_offer_price - total_list_price,2))   
