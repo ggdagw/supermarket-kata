@@ -8,7 +8,7 @@ programming exercise to model a supermarket pricing calculator
 ## Good points
 
 * The code can handle 'category offers' such as '3 ales for £6'.
-* The code would efficiently scale due to O(1) lookups in hash tables (python dictionaries) 
+* The code would efficiently scale due to O(1) lookups in hash tables (python dictionaries). 
 
 ## Points to note
 
@@ -17,7 +17,7 @@ programming exercise to model a supermarket pricing calculator
 ## Areas for improvement
 
 1. A derived dictionary class that supported self reference would remove some repeated values.
-2. Using classes would make the code safer through encapsulation and using mthods would simplify the cost calculation logic.
+2. Using classes would make the code safer through encapsulation and using methods would simplify the cost calculation logic.
 3. I would like to store the logic of the offer calculation in the offers data structure.  I could store functions in that dictionary and could use them as call-back functions from a method in e.g. a purchase class.
 4. If we stored the list and offer prices in the purchase data structure, then we could also implement a 'cheapest purchase free' or 'free delivery over £100' offers as a final pass.
 4. Currently the model only supports one offer per item listed in the catalogue.  This seems rather brittle.  It would be nice if the model worked out the best offer should more than one apply to the same item (such as 20% red wine and 2for1 wines in general).  However, we rarely see this sophistication in real supermarkets.
